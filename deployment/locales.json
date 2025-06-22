@@ -1,0 +1,772 @@
+{
+    "languages": {
+        "uz": "🇺🇿 Oʻzbekcha",
+        "uz_cyrl": "🇺🇿 Ўзбекча",
+        "ru": "🇷🇺 Русский",
+        "en": "🇬🇧 English"
+    },
+    "welcome": {
+        "uz": "Assalomu alaykum! Men sizga har hafta hayotingiz jadvalini yuboraman.\n\nTilni tanlang:",
+        "uz_cyrl": "Ассалому алайкум! Мен сизга ҳар ҳафта ҳаётингиз жадвалини юбораман.\n\nТилни танланг:",
+        "ru": "Здравствуйте! Я буду еженедельно присылать вам таблицу вашей жизни.\n\nВыберите язык:",
+        "en": "Hello! I will send you your life table every week.\n\nChoose your language:"
+    },
+    "language_selected": {
+        "uz": "Til tanlandi!",
+        "uz_cyrl": "Тил танланди!",
+        "ru": "Язык выбран!",
+        "en": "Language selected!"
+    },
+    "start_text": {
+        "uz": "Quyidagi amallardan birini tanlang:",
+        "uz_cyrl": "Қуйидаги амаллардан бирини танланг:",
+        "ru": "Выберите одно из следующих действий:",
+        "en": "Choose one of the following actions:"
+    },
+    "birthday_prompt": {
+        "uz": "Iltimos, tug'ilgan sanangizni YYYY-MM-DD formatida yuboring.\nMasalan: 1991-01-25",
+        "uz_cyrl": "Илтимос, туғилган санангизни YYYY-MM-DD форматида юборинг.\nМасалан: 1991-01-25",
+        "ru": "Пожалуйста, отправьте вашу дату рождения в формате ДД.ММ.ГГГГ или ДД/ММ/ГГГГ.",
+        "en": "Please send your birth date in YYYY-MM-DD format.\nFor example: 1991-01-25"
+    },
+    "birthday_saved": {
+        "uz": "Tug'ilgan sanangiz saqlandi: {birthday}.\nSizga har yakshanba kuni eslatma yuboriladi.",
+        "uz_cyrl": "Туғилган санангиз сақланди: {birthday}.\nСизга ҳар якшанба куни эслатма юборилади.",
+        "ru": "Ваша дата рождения сохранена: {birthday}.\nНапоминание будет приходить каждое воскресенье.",
+        "en": "Your birth date has been saved: {birthday}.\nYou will receive a reminder every Sunday."
+    },
+    "birthday_error": {
+        "uz": "Iltimos, tug'ilgan sanangizni YYYY-MM-DD formatida kiriting.\nMasalan: 1991-01-25",
+        "uz_cyrl": "Илтимос, туғилган санангизни YYYY-MM-DD форматида киритинг.\nМасалан: 1991-01-25",
+        "ru": "Неверный формат. Пожалуйста, введите дату рождения в формате ДД.ММ.ГГГГ или ДД/ММ/ГГГГ.",
+        "en": "Please enter your birth date in YYYY-MM-DD format.\nFor example: 1991-01-25"
+    },
+    "birthday_in_future_error": {
+        "uz": "❌ Tug'ilgan kun kelajakda bo'lishi mumkin emas! Iltimos, sanani to'g'ri kiriting.",
+        "uz_cyrl": "❌ Туғилган кун келажакда бўлиши мумкин эмас! Илтимос, санани тўғри киритинг.",
+        "ru": "❌ Дата рождения не может быть в будущем! Пожалуйста, введите правильную дату.",
+        "en": "❌ The birth date cannot be in the future! Please enter a correct date."
+    },
+    "birthday_not_set_error": {
+        "uz": "❌ Tug'ilgan kuningiz o'rnatilmagan!\n\nAvval tug'ilgan kuningizni o'rnating, keyin jadvalni olishingiz mumkin.",
+        "uz_cyrl": "❌ Туғилган кунингиз ўрнатилмаган!\n\nАввал туғилган кунингизни ўрнатинг, кейин жадвални олишингиз мумкин.",
+        "ru": "❌ Ваша дата рождения не установлена!\n\nСначала установите дату рождения, затем вы сможете получить таблицу.",
+        "en": "❌ Your birthday is not set!\n\nPlease set your birthday first, then you can get the table."
+    },
+    "table_caption": {
+        "uz": "Keyingi hafta keldi. Bu {weeks_passed}-hafta, @life_table_time_bot",
+        "uz_cyrl": "Кейинги ҳафта келди. Бу {weeks_passed}-ҳафта, @life_table_time_bot",
+        "ru": "Наступила следующая неделя. Это неделя номер {weeks_passed}, @life_table_time_bot",
+        "en": "Next week has come. This is week number {weeks_passed}, @life_table_time_bot"
+    },
+    "image_footer": {
+        "uz": "Bunday jadvalni har hafta oling: t.me/life_table_time_bot",
+        "uz_cyrl": "Бундай жадвални ҳар ҳафта олинг: t.me/life_table_time_bot",
+        "ru": "Получай такую таблицу каждую неделю: t.me/life_table_time_bot",
+        "en": "Get a table like this every week: t.me/life_table_time_bot"
+    },
+    "image_title": {
+        "uz": "90 Yillik Inson Hayoti Haftalarda",
+        "uz_cyrl": "90 Йиллик Инсон Ҳаёти Ҳафталарда",
+        "ru": "90-летняя жизнь человека в неделях",
+        "en": "A 90-Year Human Life in Weeks"
+    },
+    "image_age_label": {
+        "uz": "Yosh",
+        "uz_cyrl": "Ёш",
+        "ru": "Возраст",
+        "en": "Age"
+    },
+    "image_week_label": {
+        "uz": "Hafta",
+        "uz_cyrl": "Ҳафта",
+        "ru": "Неделя года",
+        "en": "Week of the Year"
+    },
+    "x_axis_label": {
+        "uz": "Yosh (Yillarda)",
+        "uz_cyrl": "Ёш (Йилларда)",
+        "ru": "Возраст (в годах)",
+        "en": "Age (Years)"
+    },
+    "y_axis_label": {
+        "uz": "Yil Haftasi",
+        "uz_cyrl": "Йил Ҳафтаси",
+        "ru": "Неделя года",
+        "en": "Week of the Year"
+    },
+    "legend_childhood_adolescence": {
+        "uz": "Bolalik va O'smirlik",
+        "uz_cyrl": "Болалик ва Ўсмирлик",
+        "ru": "Детство и Юность",
+        "en": "Childhood & Adolescence"
+    },
+    "legend_young_adulthood": {
+        "uz": "Yoshlik",
+        "uz_cyrl": "Ёшлик",
+        "ru": "Молодость",
+        "en": "Young Adulthood"
+    },
+    "legend_middle_age": {
+        "uz": "O'rta yosh",
+        "uz_cyrl": "Ўрта ёш",
+        "ru": "Средний возраст",
+        "en": "Middle Age"
+    },
+    "legend_seniority": {
+        "uz": "Keksalik",
+        "uz_cyrl": "Кексалик",
+        "ru": "Старость",
+        "en": "Seniority"
+    },
+    "legend_current": {
+        "uz": "Joriy hafta",
+        "uz_cyrl": "Жорий ҳафта",
+        "ru": "Текущая неделя",
+        "en": "Current Week"
+    },
+    "legend_future": {
+        "uz": "Sizning kelajagingiz",
+        "uz_cyrl": "Сизнинг келажагингиз",
+        "ru": "Ваше будущее",
+        "en": "Your Future"
+    },
+    "set_birthday_button": {
+        "uz": "🎂 Tug'ilgan kunni o'rnatish",
+        "uz_cyrl": "🎂 Туғилган кунни ўрнатиш",
+        "ru": "🎂 Установить день рождения",
+        "en": "🎂 Set Birthday"
+    },
+    "get_table_button": {
+        "uz": "📊 Jadvalni olish",
+        "uz_cyrl": "📊 Жадвални олиш",
+        "ru": "📊 Получить таблицу",
+        "en": "📊 Get Table"
+    },
+    "choose_lang_button": {
+        "uz": "🌐 Tilni o'zgartirish",
+        "uz_cyrl": "🌐 Тилни ўзгартириш",
+        "ru": "🌐 Сменить язык",
+        "en": "🌐 Change Language"
+    },
+    "cancel_button": {
+        "uz": "Bekor qilish",
+        "uz_cyrl": "Бекор қилиш",
+        "ru": "Отмена",
+        "en": "Cancel"
+    },
+    "birthday_weekday_info": {
+        "uz": "Siz {weekday} kuni tug'ilgansiz.",
+        "uz_cyrl": "Сиз {weekday} куни туғилгансиз.",
+        "ru": "Вы родились в {weekday}.",
+        "en": "You were born on a {weekday}."
+    },
+    "weekdays": {
+        "uz": ["Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba", "Yakshanba"],
+        "uz_cyrl": ["Душанба", "Сешанба", "Чоршанба", "Пайшанба", "Жума", "Шанба", "Якшанба"],
+        "ru": ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"],
+        "en": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    },
+    "zodiac_info": {
+        "uz": "Sizning burjingiz: {zodiac_sign}",
+        "uz_cyrl": "Сизнинг буржингиз: {zodiac_sign}",
+        "ru": "Ваш знак зодиака: {zodiac_sign}",
+        "en": "Your zodiac sign is: {zodiac_sign}"
+    },
+    "zodiac_signs": {
+        "aries": {
+            "name": { "uz": "Qo'y", "uz_cyrl": "Қўй", "ru": "Овен", "en": "Aries" },
+            "dates": "21.03-20.04"
+        },
+        "taurus": {
+            "name": { "uz": "Buzoq", "uz_cyrl": "Бузоқ", "ru": "Телец", "en": "Taurus" },
+            "dates": "21.04-20.05"
+        },
+        "gemini": {
+            "name": { "uz": "Egizaklar", "uz_cyrl": "Эгизаклар", "ru": "Близнецы", "en": "Gemini" },
+            "dates": "21.05-21.06"
+        },
+        "cancer": {
+            "name": { "uz": "Qisqichbaqa", "uz_cyrl": "Қисқичбақа", "ru": "Рак", "en": "Cancer" },
+            "dates": "22.06-22.07"
+        },
+        "leo": {
+            "name": { "uz": "Arslon", "uz_cyrl": "Арслон", "ru": "Лев", "en": "Leo" },
+            "dates": "23.07-22.08"
+        },
+        "virgo": {
+            "name": { "uz": "Parizod", "uz_cyrl": "Паризод", "ru": "Дева", "en": "Virgo" },
+            "dates": "23.08-22.09"
+        },
+        "libra": {
+            "name": { "uz": "Tarozi", "uz_cyrl": "Тарози", "ru": "Весы", "en": "Libra" },
+            "dates": "23.09-23.10"
+        },
+        "scorpio": {
+            "name": { "uz": "Chayon", "uz_cyrl": "Чаён", "ru": "Скорпион", "en": "Scorpio" },
+            "dates": "24.10-22.11"
+        },
+        "sagittarius": {
+            "name": { "uz": "O'qotar", "uz_cyrl": "Ўқотар", "ru": "Стрелец", "en": "Sagittarius" },
+            "dates": "23.11-21.12"
+        },
+        "capricorn": {
+            "name": { "uz": "Echki", "uz_cyrl": "Эчки", "ru": "Козерог", "en": "Capricorn" },
+            "dates": "22.12-20.01"
+        },
+        "aquarius": {
+            "name": { "uz": "Qovg'a", "uz_cyrl": "Қовға", "ru": "Водолей", "en": "Aquarius" },
+            "dates": "20.01-18.02"
+        },
+        "pisces": {
+            "name": { "uz": "Baliq", "uz_cyrl": "Балиқ", "ru": "Рыбы", "en": "Pisces" },
+            "dates": "19.02-20.03"
+        }
+    },
+    "life_in_numbers_title": {
+        "uz": "Hayot raqamlarda:",
+        "uz_cyrl": "Ҳаёт рақамларда:",
+        "ru": "Жизнь в цифрах:",
+        "en": "Life in numbers:"
+    },
+    "life_in_numbers_stats": {
+        "uz": "{days} kun | {hours} soat | {minutes} daqiqa",
+        "uz_cyrl": "{days} кун | {hours} соат | {minutes} дақиқа",
+        "ru": "{days} дней | {hours} часов | {minutes} минут",
+        "en": "{days} days | {hours} hours | {minutes} minutes"
+    },
+    "main_menu_button": {
+        "uz": "⬅️ Asosiy menyuga",
+        "uz_cyrl": "⬅️ Асосий менюга",
+        "ru": "⬅️ Главное меню",
+        "en": "⬅️ Main Menu"
+    },
+    "stats_menu_button": {
+        "uz": "📊 Shaxsiy statistika",
+        "uz_cyrl": "📊 Шахсий статистика",
+        "ru": "📊 Персональная статистика",
+        "en": "📊 Personal Stats"
+    },
+    "contact_admin_button": {
+        "uz": "🧑‍💻 Admin bilan aloqa",
+        "uz_cyrl": "🧑‍💻 Админ билан алоқа",
+        "ru": "🧑‍💻 Связь с админом",
+        "en": "🧑‍💻 Contact Admin"
+    },
+    "other_projects_button": {
+        "uz": "🚀 Boshqa loyihalar",
+        "uz_cyrl": "🚀 Бошқа лойиҳалар",
+        "ru": "🚀 Другие проекты",
+        "en": "🚀 Other Projects"
+    },
+    "contact_admin_text": {
+        "uz": "Admin bilan bog'lanish uchun: @alisher_khudoyberdiev",
+        "uz_cyrl": "Админ билан боғланиш учун: @alisher_khudoyberdiev",
+        "ru": "Для связи с администратором: @alisher_khudoyberdiev",
+        "en": "To contact the admin: @alisher_khudoyberdiev"
+    },
+    "other_projects_text": {
+        "uz": "Lion Soft — biznesingiz uchun kompleks raqamli yechimlar.\n\nMobil ilovalar, saytlar, Telegram botlar va CRM tizimlari va boshqalar — barchasi bir joyda.\n\nSayt: www.lionsoft.uz\nTelegram: @lionsoft_uz\nTelefon: +998 (93) 831-51-17",
+        "uz_cyrl": "Lion Soft — бизнесингиз учун комплекс рақамли ечимлар.\n\nМобил иловалар, сайтлар, Telegram ботлар ва CRM тизимлари ва бошқалар — барчаси бир жойда.\n\nСайт: www.lionsoft.uz\nTelegram: @lionsoft_uz\nТелефон: +998 (93) 831-51-17",
+        "ru": "Lion Soft — комплексные цифровые решения для вашего бизнеса.\n\nМобильные приложения, сайты, Telegram-боты, CRM-системы и многое другое — всё в одном месте.\n\nСайт: www.lionsoft.uz\nTelegram: @lionsoft_uz\nТелефон: +998 (93) 831-51-17",
+        "en": "Lion Soft — comprehensive digital solutions for your business.\n\nMobile apps, websites, Telegram bots, CRM systems, and more — all in one place.\n\nWebsite: www.lionsoft.uz\nTelegram: @lionsoft_uz\nPhone: +998 (93) 831-51-17"
+    },
+    "donate_button": {
+        "uz": "🙏 Loyihani qo'llab-quvvatlash",
+        "uz_cyrl": "🙏 Лойиҳани қўллаб-қувватлаш",
+        "ru": "🙏 Поддержать проект",
+        "en": "🙏 Support the project"
+    },
+    "info_menu_button": {
+        "uz": "ℹ️ Ma'lumot",
+        "uz_cyrl": "ℹ️ Маълумот",
+        "ru": "ℹ️ Информация",
+        "en": "ℹ️ Information"
+    },
+    "about_bot_button": {
+        "uz": "🤖 Bot haqida",
+        "uz_cyrl": "🤖 Бот ҳақида",
+        "ru": "🤖 О боте",
+        "en": "🤖 About the bot"
+    },
+    "about_bot_text": {
+        "uz": "Ushbu bot sizning hayotingizni haftalarga bo'lib, uni vizual tarzda ko'rsatib beradi. Maqsad - har bir haftaning qadriga yetish va vaqtdan unumli foydalanishga undash. Bot sizga o'tgan umringizni tahlil qilish va kelajakni rejalashtirish uchun noyob imkoniyatni taqdim etadi.",
+        "uz_cyrl": "Ушбу бот сизнинг ҳаётингизни ҳафталарга бўлиб, уни визуал тарзда кўрсатиб беради. Мақсад - ҳар бир ҳафтанинг қадрига етиш ва вақтдан унумли фойдаланишга ундаш. Бот сизга ўтган умрингизни таҳлил қилиш ва келажакни режалаштириш учун ноёб имкониятни тақдим этади.",
+        "ru": "Этот бот визуализирует вашу жизнь в неделях. Цель — помочь вам осознать ценность каждой недели и мотивировать на продуктивное использование времени. Бот предоставляет уникальную возможность проанализировать прошлое и спланировать будущее.",
+        "en": "This bot provides a unique opportunity to analyze your past and plan for the future."
+    },
+    "main_keyboard_menu_button": {
+        "uz": "⬅️ Asosiy Menyu",
+        "uz_cyrl": "⬅️ Асосий Меню",
+        "ru": "⬅️ Главное Меню",
+        "en": "⬅️ Main Menu"
+    },
+    "commands": {
+        "start": {
+            "uz": "Botni ishga tushirish",
+            "uz_cyrl": "Ботни ишга тушириш",
+            "ru": "Запустить бота",
+            "en": "Start the bot"
+        },
+        "menu": {
+            "uz": "Asosiy menyuni ko'rsatish",
+            "uz_cyrl": "Асосий менюни кўрсатиш",
+            "ru": "Показать главное меню",
+            "en": "Show main menu"
+        },
+        "lang": {
+            "uz": "Tilni o'zgartirish",
+            "uz_cyrl": "Тилни ўзгартириш",
+            "ru": "Сменить язык",
+            "en": "Change language"
+        },
+        "help": {
+            "uz": "Yordam",
+            "uz_cyrl": "Ёрдам",
+            "ru": "Помощь",
+            "en": "Help"
+        }
+    },
+    "help_text": {
+        "uz": "👋 Assalomu alaykum! Men Life Table Botman.\n\nMening vazifam - sizga hayotingizni haftalarda ko'rsatib, vaqtning qadriga yetishingizga yordam berish.\n\nAsosiy buyruqlar:\n- /start - Botni ishga tushirish.\n- /help - Ushbu yordam xabarini ko'rsatish.\n\n📊 Shaxsiy statistika menyusi:\nBu yerda siz o'z \"Hayot jadvalingizni\" olishingiz va tug'ilgan kuningizni o'rnatishingiz/o'zgartirishingiz mumkin.\n\nHar yakshanba men sizga yangilangan hayot jadvalingizni va ruhlantiruvchi iqtibos yuboraman. Vaqt o'tmoqda! ⏳",
+        "uz_cyrl": "👋 Ассалому алайкум! Мен Life Table Ботман.\n\nМенинг вазифам - сизга ҳаётингизни ҳафталарда кўрсатиб, вақтнинг қадрига етишингизга ёрдам бериш.\n\nАсосий буйруқлар:\n- /start - Ботни ишга тушириш.\n- /help - Ушбу ёрдам хабарини кўрсатиш.\n\n📊 Шахсий статистика менюси:\nБу ерда сиз ўз \"Ҳаёт жадвалингизни\" олишингиз ва туғилган кунингизни ўрнатишингиз/ўзгартиришингиз мумкин.\n\nҲар якшанба мен сизга янгиланган ҳаёт жадвалингизни ва руҳлантирувчи иқтибос юбораман. Вақт ўтмоқда! ⏳",
+        "ru": "👋 Здравствуйте! Я Life Table Бот.\n\nМоя задача — помочь вам осознать ценность времени, визуализируя вашу жизнь в неделях.\n\nОсновные команды:\n- /start - Запустить бота.\n- /help - Показать это справочное сообщение.\n\n📊 Меню персональной статистики:\nЗдесь вы можете получить свою \"Таблицу жизни\" и установить/изменить дату своего рождения.\n\nКаждое воскресенье я буду присылать вам обновленную таблицу жизни и мотивирующую цитату. Время идет! ⏳",
+        "en": "👋 Hello! I am the Life Table Bot.\n\nMy mission is to help you appreciate the value of time by visualizing your life in weeks.\n\nMain commands:\n- /start - Start the bot.\n- /help - Show this help message.\n\n📊 Personal Stats Menu:\nHere you can get your \"Life Table\" and set/change your birth date.\n\nEvery Sunday, I will send you an updated life table and a motivational quote. Time is passing! ⏳"
+    },
+    "admin": {
+        "access_denied": {
+            "uz": "Sizda bu buyruq uchun ruxsat yo'q.",
+            "uz_cyrl": "Сизда бу буйруқ учун рухсат йўқ.",
+            "ru": "У вас нет доступа к этой команде.",
+            "en": "You do not have permission for this command."
+        },
+        "admin_menu_title": {
+            "uz": "👑 Admin Panel",
+            "uz_cyrl": "👑 Админ Панел",
+            "ru": "👑 Админ-панель",
+            "en": "👑 Admin Panel"
+        },
+        "broadcast_button": {
+            "uz": "📢 Xabar yuborish",
+            "uz_cyrl": "📢 Хабар юбориш",
+            "ru": "📢 Отправить сообщение",
+            "en": "📢 Send Broadcast"
+        },
+        "analytics_button": {
+            "uz": "📊 Statistika",
+            "uz_cyrl": "📊 Статистика",
+            "ru": "📊 Статистика",
+            "en": "📊 Analytics"
+        },
+        "manual_weekly_update_button": {
+            "uz": "📅 Haftalik yangilanishni yuborish",
+            "uz_cyrl": "📅 Ҳафталик янгиланишни юбориш",
+            "ru": "📅 Отправить еженедельное обновление",
+            "en": "📅 Send Weekly Update"
+        },
+        "manual_weekly_update_finished": {
+            "uz": "✅ Haftalik yangilanish yakunlandi.\n\nTug'ilgan kunini o'rnatgan {total_users} foydalanuvchidan {successful_sends} tasiga yuborildi.",
+            "uz_cyrl": "✅ Ҳафталик янгиланиш якунланди.\n\nТуғилган кунини ўрнатган {total_users} фойдаланувчидан {successful_sends} тасига юборилди.",
+            "ru": "✅ Еженедельное обновление завершено.\n\nОтправлено {successful_sends} из {total_users} пользователей с установленной датой рождения.",
+            "en": "✅ Weekly update process finished.\n\nSent to {successful_sends} out of {total_users} users with birthdays set."
+        },
+        "broadcast_prompt": {
+            "uz": "Barcha foydalanuvchilarga yuborish uchun xabarni kiriting (bekor qilish uchun /cancel yozing):",
+            "uz_cyrl": "Барча фойдаланувчиларга юбориш учун хабарни киритинг (бекор қилиш учун /cancel ёзинг):",
+            "ru": "Введите сообщение для рассылки всем пользователям (для отмены введите /cancel):",
+            "en": "Enter the message to broadcast to all users (type /cancel to abort):"
+        },
+        "broadcast_started": {
+            "uz": "📢 Xabar yuborish boshlandi...",
+            "uz_cyrl": "📢 Хабар юбориш бошланди...",
+            "ru": "📢 Рассылка началась...",
+            "en": "📢 Broadcast started..."
+        },
+        "broadcast_summary": {
+            "uz": "✅ Xabar yuborish yakunlandi.\nMuvaffaqiyatli: {sent_count}\nXatolik: {failed_count}",
+            "uz_cyrl": "✅ Хабар юбориш якунланди.\nМуваффақиятли: {sent_count}\nХатолик: {failed_count}",
+            "ru": "✅ Рассылка завершена.\nУспешно: {sent_count}\nОшибок: {failed_count}",
+            "en": "✅ Broadcast finished.\nSuccessful: {sent_count}\nFailed: {failed_count}"
+        },
+        "analytics_title": {
+            "uz": "📊 Bot Statistikasi",
+            "uz_cyrl": "📊 Бот Статистикаси",
+            "ru": "📊 Статистика Бота",
+            "en": "📊 Bot Analytics"
+        },
+        "total_users": {
+            "uz": "Umumiy foydalanuvchilar: {count}",
+            "uz_cyrl": "Умумий фойдаланувчилар: {count}",
+            "ru": "Всего пользователей: {count}",
+            "en": "Total users: {count}"
+        },
+        "users_by_lang": {
+            "uz": "Til bo'yicha foydalanuvchilar:",
+            "uz_cyrl": "Тил бўйича фойдаланувчилар:",
+            "ru": "Пользователи по языкам:",
+            "en": "Users by language:"
+        },
+        "users_with_birthday": {
+            "uz": "Tug'ilgan kunini o'rnatganlar: {count} ({percent}%)",
+            "uz_cyrl": "Туғилган кунини ўрнатганлар: {count} ({percent}%)",
+            "ru": "Установили дату рождения: {count} ({percent}%)",
+            "en": "Users with birthday set: {count} ({percent}%)"
+        },
+        "new_users_title": {
+            "uz": "Yangi foydalanuvchilar:",
+            "uz_cyrl": "Янги фойдаланувчилар:",
+            "ru": "Новые пользователи:",
+            "en": "New Users:"
+        },
+        "new_users_stats": {
+            "uz": "Oxirgi 24 soat: {day}\nOxirgi 7 kun: {week}\nOxirgi 30 kun: {month}",
+            "uz_cyrl": "Охирги 24 соат: {day}\nОхирги 7 кун: {week}\nОхирги 30 кун: {month}",
+            "ru": "Последние 24ч: {day}\nПоследние 7д: {week}\nПоследние 30д: {month}",
+            "en": "Last 24h: {day}\nLast 7d: {week}\nLast 30d: {month}"
+        },
+        "command_usage_title": {
+            "uz": "Buyruqlar statistikasi:",
+            "uz_cyrl": "Буйруқлар статистикаси:",
+            "ru": "Статистика команд:",
+            "en": "Command Usage:"
+        },
+        "operation_cancelled": {
+            "uz": "Amal bekor qilindi.",
+            "uz_cyrl": "Амал бекор қилди.",
+            "ru": "Операция отменена.",
+            "en": "Operation cancelled."
+        }
+    },
+    "photo_caption": {
+        "uz": "Sizning hayot jadvalingiz: {weeks_passed} hafta o'tdi ({percentage_lived:.1f}%)",
+        "uz_cyrl": "Сизнинг ҳаёт жадвалингизни: {weeks_passed} ҳафта отилди ({percentage_lived:.1f}%)",
+        "ru": "Ваша таблица жизни: прошло {weeks_passed} недель ({percentage_lived:.1f}%)",
+        "en": "Your life table: {weeks_passed} weeks passed ({percentage_lived:.1f}%)"
+    },
+    "image": {
+        "title": {
+            "uz": "{user_name}ning 90 Yillik Hayoti Haftalarda",
+            "uz_cyrl": "{user_name}нинг 90 Йиллик Ҳаёти Ҳафталарда",
+            "ru": "90-летняя жизнь {user_name} в неделях",
+            "en": "{user_name}'s 90-Year Life in Weeks"
+        },
+        "title_weekly": {
+            "uz": "90 Yillik Inson Hayoti Haftalarda",
+            "uz_cyrl": "90 Йиллик Инсон Ҳаёти Ҳафталарда",
+            "ru": "90-летняя жизнь человека в неделях",
+            "en": "A 90-Year Human Life in Weeks"
+        },
+        "footer": {
+            "uz": "Bunday jadvalni har hafta oling: @{bot_username}",
+            "uz_cyrl": "Бундай жадвални ҳар ҳафта олинг: @{bot_username}",
+            "ru": "Получай такую таблицу каждую неделю: @{bot_username}",
+            "en": "Get a table like this every week: @{bot_username}"
+        }
+    },
+    "stats": {
+        "title": {
+            "uz": "📊 Shaxsiy ma'lumotlar",
+            "uz_cyrl": "Шахсий маълумотлар",
+            "ru": "📊 Личные данные",
+            "en": "📊 Personal Information"
+        },
+        "birthday": {
+            "uz": "Tug'ilgan kun",
+            "uz_cyrl": "Туғилган кун",
+            "ru": "День рождения",
+            "en": "Birthday"
+        },
+        "day_of_week": {
+            "uz": "Hafta kuni",
+            "uz_cyrl": "Ҳафта куни",
+            "ru": "День недели",
+            "en": "Day of week"
+        },
+        "zodiac_sign": {
+            "uz": "Burj",
+            "uz_cyrl": "Бурж",
+            "ru": "Знак зодиака",
+            "en": "Zodiac sign"
+        },
+        "life_in_numbers": {
+            "uz": "Hayot raqamlarda",
+            "uz_cyrl": "Ҳаёт рақамларда",
+            "ru": "Жизнь в цифрах",
+            "en": "Life in numbers"
+        },
+        "days": {
+            "uz": "Kunlar",
+            "uz_cyrl": "Кунлар",
+            "ru": "Дни",
+            "en": "Days"
+        },
+        "hours": {
+            "uz": "Soatlar",
+            "uz_cyrl": "Соатлар",
+            "ru": "Часы",
+            "en": "Hours"
+        },
+        "minutes": {
+            "uz": "Daqiqalar",
+            "uz_cyrl": "Дақиқалар",
+            "ru": "Минуты",
+            "en": "Minutes"
+        }
+    },
+    "zodiac": {
+        "aries": {
+            "uz": "Qo'y",
+            "uz_cyrl": "Қўй",
+            "ru": "Овен",
+            "en": "Aries"
+        },
+        "taurus": {
+            "uz": "Buzoq",
+            "uz_cyrl": "Бузоқ",
+            "ru": "Телец",
+            "en": "Taurus"
+        },
+        "gemini": {
+            "uz": "Egizaklar",
+            "uz_cyrl": "Эгизаклар",
+            "ru": "Близнецы",
+            "en": "Gemini"
+        },
+        "cancer": {
+            "uz": "Qisqichbaqa",
+            "uz_cyrl": "Қисқичбақа",
+            "ru": "Рак",
+            "en": "Cancer"
+        },
+        "leo": {
+            "uz": "Arslon",
+            "uz_cyrl": "Арслон",
+            "ru": "Лев",
+            "en": "Leo"
+        },
+        "virgo": {
+            "uz": "Parizod",
+            "uz_cyrl": "Паризод",
+            "ru": "Дева",
+            "en": "Virgo"
+        },
+        "libra": {
+            "uz": "Tarozi",
+            "uz_cyrl": "Тарози",
+            "ru": "Весы",
+            "en": "Libra"
+        },
+        "scorpio": {
+            "uz": "Chayon",
+            "uz_cyrl": "Чаён",
+            "ru": "Скорпион",
+            "en": "Scorpio"
+        },
+        "sagittarius": {
+            "uz": "O'qotar",
+            "uz_cyrl": "Ўқотар",
+            "ru": "Стрелец",
+            "en": "Sagittarius"
+        },
+        "capricorn": {
+            "uz": "Echki",
+            "uz_cyrl": "Эчки",
+            "ru": "Козерог",
+            "en": "Capricorn"
+        },
+        "aquarius": {
+            "uz": "Qovg'a",
+            "uz_cyrl": "Қовға",
+            "ru": "Водолей",
+            "en": "Aquarius"
+        },
+        "pisces": {
+            "uz": "Baliq",
+            "uz_cyrl": "Балиқ",
+            "ru": "Рыбы",
+            "en": "Pisces"
+        }
+    },
+    "zodiac_dates": {
+        "aries": {
+            "uz": "21 Mart - 19 Aprel",
+            "uz_cyrl": "21 март - 19 апреля",
+            "ru": "21 марта - 19 апреля",
+            "en": "March 21 - April 19"
+        },
+        "taurus": {
+            "uz": "20 Aprel - 20 May",
+            "uz_cyrl": "20 апреля - 20 мая",
+            "ru": "20 апреля - 20 мая",
+            "en": "April 20 - May 20"
+        },
+        "gemini": {
+            "uz": "21 May - 20 Iyun",
+            "uz_cyrl": "21 мая - 20 июня",
+            "ru": "21 мая - 20 июня",
+            "en": "May 21 - June 20"
+        },
+        "cancer": {
+            "uz": "21 Iyun - 22 Iyul",
+            "uz_cyrl": "21 июня - 22 июля",
+            "ru": "21 июня - 22 июля",
+            "en": "June 21 - July 22"
+        },
+        "leo": {
+            "uz": "23 Iyul - 22 Avgust",
+            "uz_cyrl": "23 июля - 22 августа",
+            "ru": "23 июля - 22 августа",
+            "en": "July 23 - August 22"
+        },
+        "virgo": {
+            "uz": "23 Avgust - 22 Sentyabr",
+            "uz_cyrl": "23 августа - 22 сентября",
+            "ru": "23 августа - 22 сентября",
+            "en": "August 23 - September 22"
+        },
+        "libra": {
+            "uz": "23 Sentyabr - 22 Oktyabr",
+            "uz_cyrl": "23 сентября - 22 октября",
+            "ru": "23 сентября - 22 октября",
+            "en": "September 23 - October 22"
+        },
+        "scorpio": {
+            "uz": "23 Oktyabr - 21 Noyabr",
+            "uz_cyrl": "23 октября - 21 ноября",
+            "ru": "23 октября - 21 ноября",
+            "en": "October 23 - November 21"
+        },
+        "sagittarius": {
+            "uz": "22 Noyabr - 21 Dekabr",
+            "uz_cyrl": "22 ноября - 21 декабря",
+            "ru": "22 ноября - 21 декабря",
+            "en": "November 22 - December 21"
+        },
+        "capricorn": {
+            "uz": "22 Dekabr - 19 Yanvar",
+            "uz_cyrl": "22 декабря - 19 января",
+            "ru": "22 декабря - 19 января",
+            "en": "December 22 - January 19"
+        },
+        "aquarius": {
+            "uz": "20 Yanvar - 18 Fevral",
+            "uz_cyrl": "20 января - 18 февраля",
+            "ru": "20 января - 18 февраля",
+            "en": "January 20 - February 18"
+        },
+        "pisces": {
+            "uz": "19 Fevral - 20 Mart",
+            "uz_cyrl": "19 февраля - 20 марта",
+            "ru": "19 февраля - 20 марта",
+            "en": "February 19 - March 20"
+        }
+    },
+    "weekly_update": {
+        "caption": {
+            "uz": "Keyingi hafta keldi. Bu {weeks_passed}-hafta",
+            "uz_cyrl": "Кейинги ҳафта келди. Бу {weeks_passed}-ҳафта",
+            "ru": "Наступила следующая неделя. Это неделя номер {weeks_passed}",
+            "en": "Next week has come. This is week number {weeks_passed}"
+        },
+        "quote_of_the_week": {
+            "uz": "Haftaning iqtibosi",
+            "uz_cyrl": "Ҳафтани иқтибоси",
+            "ru": "Цитата недели",
+            "en": "Quote of the week"
+        }
+    },
+    "command_descriptions": {
+        "start": {
+            "uz": "Botni ishga tushirish",
+            "uz_cyrl": "Ботни ишга тушириш",
+            "ru": "Запустить бота",
+            "en": "Start the bot"
+        },
+        "menu": {
+            "uz": "Asosiy menyuni ko'rsatish",
+            "uz_cyrl": "Асосий менюни кўрсатиш",
+            "ru": "Показать главное меню",
+            "en": "Show main menu"
+        },
+        "help": {
+            "uz": "Yordam",
+            "uz_cyrl": "Ёрдам",
+            "ru": "Помощь",
+            "en": "Help"
+        }
+    },
+    "table_text_details": {
+        "header": {
+            "uz": "Sizning hayot jadvalingiz:",
+            "uz_cyrl": "Сизнинг ҳаёт жадвалингиз:",
+            "ru": "Ваша таблица жизни:",
+            "en": "Your Life Table:"
+        },
+        "weeks_passed": {
+            "uz": "Tug'ilganingizdan beri {weeks} hafta o'tdi",
+            "uz_cyrl": "Туғилганингиздан бери {weeks} ҳафта ўтди",
+            "ru": "С вашего рождения прошло {weeks} недель",
+            "en": "{weeks} weeks have passed since you were born"
+        },
+        "personal_info_header": {
+            "uz": "📊 Shaxsiy ma'lumotlar",
+            "uz_cyrl": "📊 Шахсий маълумотлар",
+            "ru": "📊 Личная информация",
+            "en": "📊 Personal Information"
+        },
+        "birthday_line": {
+            "uz": "🎂 Tug'ilgan kun: {birthday}",
+            "uz_cyrl": "🎂 Туғилган кун: {birthday}",
+            "ru": "🎂 День рождения: {birthday}",
+            "en": "🎂 Birthday: {birthday}"
+        },
+        "weekday_line": {
+            "uz": "☀️ Hafta kuni: {weekday}",
+            "uz_cyrl": "☀️ Ҳафта куни: {weekday}",
+            "ru": "☀️ День недели: {weekday}",
+            "en": "☀️ Day of the week: {weekday}"
+        },
+        "zodiac_line": {
+            "uz": "⭐ Burj: {zodiac_name} ({zodiac_dates})",
+            "uz_cyrl": "⭐ Бурж: {zodiac_name} ({zodiac_dates})",
+            "ru": "⭐ Знак зодиака: {zodiac_name} ({zodiac_dates})",
+            "en": "⭐ Zodiac Sign: {zodiac_name} ({zodiac_dates})"
+        },
+        "life_in_numbers_header": {
+            "uz": "Hayot raqamlarda",
+            "uz_cyrl": "Ҳаёт рақамларда",
+            "ru": "Жизнь в цифрах",
+            "en": "Life in numbers"
+        },
+        "days_line": {
+            "uz": "🗓️ Kunlar: {days}",
+            "uz_cyrl": "🗓️ Кунлар: {days}",
+            "ru": "🗓️ Дни: {days}",
+            "en": "🗓️ Days: {days}"
+        },
+        "hours_line": {
+            "uz": "⏳ Soatlar: {hours}",
+            "uz_cyrl": "⏳ Соатлар: {hours}",
+            "ru": "⏳ Часы: {hours}",
+            "en": "⏳ Hours: {hours}"
+        },
+        "minutes_line": {
+            "uz": "⏳ Daqiqalar: {minutes}",
+            "uz_cyrl": "⏳ Дақиқалар: {minutes}",
+            "ru": "⏳ Минуты: {minutes}",
+            "en": "⏳ Minutes: {minutes}"
+        },
+        "wisdom_prefix": {
+            "uz": "Hikmat",
+            "uz_cyrl": "Ҳикмат",
+            "ru": "Мудрость",
+            "en": "Wisdom"
+        }
+    },
+    "months": {
+        "uz": ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"],
+        "uz_cyrl": ["Январ", "Феврал", "Март", "Апрел", "Май", "Июн", "Июл", "Август", "Сентябр", "Октябр", "Ноябр", "Декабр"],
+        "ru": ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
+        "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    }
+} 

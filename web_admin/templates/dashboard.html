@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Life Table Bot Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Statistics Cards -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-white-50 text-uppercase mb-1">Jami Foydalanuvchilar</div>
+                        <div class="h5 mb-0 text-white">{{ total_users }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-white-50 text-uppercase mb-1">Faol Foydalanuvchilar</div>
+                        <div class="h5 mb-0 text-white">{{ active_users }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-check fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-white-50 text-uppercase mb-1">Tug'ilgan Kun O'rnatgan</div>
+                        <div class="h5 mb-0 text-white">{{ users_with_birthday }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-birthday-cake fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class="text-white-50 text-uppercase mb-1">Faollik Darajasi</div>
+                        <div class="h5 mb-0 text-white">
+                            {% if total_users > 0 %}
+                                {{ "%.1f"|format((active_users / total_users) * 100) }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-percentage fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Users -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-clock me-2"></i>
+                    So'nggi Qo'shilgan Foydalanuvchilar
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Ism</th>
+                                <th>Til</th>
+                                <th>Qo'shilgan Sana</th>
+                                <th>Holat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recent_users %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-secondary">{{ user.telegram_id }}</span>
+                                </td>
+                                <td>
+                                    {% if user.username %}
+                                        <a href="https://t.me/{{ user.username }}" target="_blank" class="text-decoration-none">
+                                            @{{ user.username }}
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.first_name %}
+                                        {{ user.first_name }}
+                                        {% if user.last_name %}
+                                            {{ user.last_name }}
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ user.language }}</span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {% if user.join_date %}
+                                            {% if user.join_date is string %}
+                                                {{ user.join_date[:10] if user.join_date else '-' }}
+                                            {% else %}
+                                                {{ user.join_date.strftime('%d.%m.%Y %H:%M') if user.join_date else '-' }}
+                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </small>
+                                </td>
+                                <td>
+                                    {% if user.is_active %}
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Faol
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-times me-1"></i>Faol emas
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('users') }}" class="btn btn-primary">
+                        <i class="fas fa-users me-2"></i>
+                        Barcha Foydalanuvchilarni Ko'rish
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt me-2"></i>
+                    Tez Amallar
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('users') }}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-users me-2"></i>
+                            Foydalanuvchilarni Boshqarish
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('statistics') }}" class="btn btn-outline-info w-100">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Statistika
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{{ url_for('broadcast') }}" class="btn btn-outline-warning w-100">
+                            <i class="fas fa-broadcast-tower me-2"></i>
+                            Broadcast Xabar
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-outline-success w-100" onclick="refreshStats()">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            Yangilash
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function refreshStats() {
+    fetch('/api/stats')
+        .then(response => response.json())
+        .then(data => {
+            // Update statistics cards
+            document.querySelectorAll('.stat-card .h5').forEach((element, index) => {
+                switch(index) {
+                    case 0:
+                        element.textContent = data.total_users;
+                        break;
+                    case 1:
+                        element.textContent = data.active_users;
+                        break;
+                    case 2:
+                        element.textContent = data.users_with_birthday;
+                        break;
+                    case 3:
+                        const percentage = data.total_users > 0 ? 
+                            ((data.active_users / data.total_users) * 100).toFixed(1) : 0;
+                        element.textContent = percentage + '%';
+                        break;
+                }
+            });
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Auto-refresh every 30 seconds
+setInterval(refreshStats, 30000);
+</script>
+{% endblock %} 

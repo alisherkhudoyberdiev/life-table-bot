@@ -1,0 +1,7 @@
+# Deployment .gitignore
+*.pyc
+__pycache__/
+*.log
+.env
+*.db-journal
+test_*.png

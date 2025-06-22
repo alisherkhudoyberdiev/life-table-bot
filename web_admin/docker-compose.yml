@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  web-admin:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=your-secret-key-change-this-in-production
+      - FLASK_ENV=production
+    volumes:
+      - ../bot_database.db:/app/bot_database.db:ro
+      - ./admin_users.db:/app/admin_users.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/login"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s 
+ 

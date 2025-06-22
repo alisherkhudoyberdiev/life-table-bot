@@ -1,0 +1,162 @@
+<div class="row">
+    <div class="col-md-6">
+        <h6 class="text-primary">Asosiy Ma'lumotlar</h6>
+        <table class="table table-sm">
+            <tr>
+                <td><strong>Telegram ID:</strong></td>
+                <td><span class="badge bg-secondary">{{ user.telegram_id }}</span></td>
+            </tr>
+            <tr>
+                <td><strong>Username:</strong></td>
+                <td>
+                    {% if user.username %}
+                        <a href="https://t.me/{{ user.username }}" target="_blank">
+                            @{{ user.username }}
+                        </a>
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Ism:</strong></td>
+                <td>
+                    {% if user.first_name %}
+                        {{ user.first_name }}
+                        {% if user.last_name %}
+                            {{ user.last_name }}
+                        {% endif %}
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Til:</strong></td>
+                <td>
+                    {% set lang_names = {'uz': '🇺🇿 O\'zbekcha', 'uz_cyrl': '🇺🇿 Ўзбекча', 'ru': '🇷🇺 Русский', 'en': '🇬🇧 English'} %}
+                    <span class="badge bg-info">{{ lang_names.get(user.language, user.language) }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Qo'shilgan sana:</strong></td>
+                <td>
+                    {% if user.join_date %}
+                        {% if user.join_date is string %}
+                            {{ user.join_date[:10] if user.join_date else '-' }}
+                        {% else %}
+                            {{ user.join_date.strftime('%d.%m.%Y %H:%M') if user.join_date else '-' }}
+                        {% endif %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Tug'ilgan kun:</strong></td>
+                <td>
+                    {% if user.birthday %}
+                        <span class="text-success">
+                            <i class="fas fa-birthday-cake me-1"></i>
+                            {% if user.birthday is string %}
+                                {{ user.birthday[:10] if user.birthday else '-' }}
+                            {% else %}
+                                {{ user.birthday.strftime('%d.%m.%Y') if user.birthday else '-' }}
+                            {% endif %}
+                        </span>
+                    {% else %}
+                        <span class="text-muted">
+                            <i class="fas fa-times me-1"></i>
+                            O'rnatilmagan
+                        </span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Holat:</strong></td>
+                <td>
+                    {% if user.is_active %}
+                        <span class="badge bg-success">
+                            <i class="fas fa-check me-1"></i>Faol
+                        </span>
+                    {% else %}
+                        <span class="badge bg-danger">
+                            <i class="fas fa-times me-1"></i>Faol emas
+                        </span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="col-md-6">
+        <h6 class="text-primary">Buyruqlar Statistikasi</h6>
+        {% if command_usage %}
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Buyruq</th>
+                            <th>Ishlatilgan</th>
+                            <th>Oxirgi marta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cmd in command_usage %}
+                        <tr>
+                            <td><code>/{{ cmd.command_name }}</code></td>
+                            <td><span class="badge bg-primary">{{ cmd.usage_count }}</span></td>
+                            <td>
+                                <small class="text-muted">
+                                    {% if cmd.last_used %}
+                                        {% if cmd.last_used is string %}
+                                            {{ cmd.last_used[:10] if cmd.last_used else '-' }}
+                                        {% else %}
+                                            {{ cmd.last_used.strftime('%d.%m.%Y %H:%M') if cmd.last_used else '-' }}
+                                        {% endif %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </small>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center text-muted">
+                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                <br>Buyruqlar statistikasi mavjud emas
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="d-flex justify-content-between">
+            <form method="POST" action="{{ url_for('toggle_user_status', user_id=user.telegram_id) }}" style="display: inline;">
+                {% if user.is_active %}
+                    <button type="submit" class="btn btn-warning btn-sm">
+                        <i class="fas fa-ban me-1"></i>Faollikni o'chirish
+                    </button>
+                {% else %}
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <i class="fas fa-check me-1"></i>Faollikni yoqish
+                    </button>
+                {% endif %}
+            </form>
+            
+            <div>
+                <a href="https://t.me/{{ user.username if user.username else user.telegram_id }}" 
+                   target="_blank" class="btn btn-primary btn-sm">
+                    <i class="fas fa-paper-plane me-1"></i>Telegram'da ochish
+                </a>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Yopish
+                </button>
+            </div>
+        </div>
+    </div>
+</div> 

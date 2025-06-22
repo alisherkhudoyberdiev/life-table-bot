@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}Statistika - Life Table Bot Admin{% endblock %}
+{% block page_title %}Statistika va Tahlil{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Command Usage Chart -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Buyruqlar Statistikasi
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="commandChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Distribution Chart -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-globe me-2"></i>
+                    Tillar Bo'yicha Taqsimot
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="languageChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Command Usage Table -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-list me-2"></i>
+                    Buyruqlar Ro'yxati
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Buyruq</th>
+                                <th>Ishlatilgan</th>
+                                <th>Foiz</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set total_commands = command_stats|sum(attribute='total_usage') %}
+                            {% for command in command_stats %}
+                            <tr>
+                                <td>
+                                    <code>/{{ command.command_name }}</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ command.total_usage }}</span>
+                                </td>
+                                <td>
+                                    {% if total_commands > 0 %}
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar" role="progressbar" 
+                                                 style="width: {{ (command.total_usage / total_commands * 100)|round(1) }}%">
+                                                {{ (command.total_usage / total_commands * 100)|round(1) }}%
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Stats Table -->
+    <div class="col-lg-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-language me-2"></i>
+                    Tillar Statistikasi
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Til</th>
+                                <th>Foydalanuvchilar</th>
+                                <th>Foiz</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set total_users = language_stats|sum(attribute='count') %}
+                            {% for lang in language_stats %}
+                            <tr>
+                                <td>
+                                    {% set lang_names = {'uz': '🇺🇿 O\'zbekcha', 'uz_cyrl': '🇺🇿 Ўзбекча', 'ru': '🇷🇺 Русский', 'en': '🇬🇧 English'} %}
+                                    {{ lang_names.get(lang.language, lang.language) }}
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ lang.count }}</span>
+                                </td>
+                                <td>
+                                    {% if total_users > 0 %}
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar bg-info" role="progressbar" 
+                                                 style="width: {{ (lang.count / total_users * 100)|round(1) }}%">
+                                                {{ (lang.count / total_users * 100)|round(1) }}%
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <i class="fas fa-terminal fa-3x mb-3"></i>
+                <h4>{{ command_stats|length }}</h4>
+                <p class="mb-0">Faol Buyruqlar</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <i class="fas fa-globe fa-3x mb-3"></i>
+                <h4>{{ language_stats|length }}</h4>
+                <p class="mb-0">Qo'llab-quvvatlanadigan Tillar</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-line fa-3x mb-3"></i>
+                <h4>{{ command_stats|sum(attribute='total_usage') }}</h4>
+                <p class="mb-0">Jami Buyruq Ishlatilgan</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-3x mb-3"></i>
+                <h4>{{ language_stats|sum(attribute='count') }}</h4>
+                <p class="mb-0">Jami Foydalanuvchilar</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Command Usage Chart
+const commandCtx = document.getElementById('commandChart').getContext('2d');
+const commandChart = new Chart(commandCtx, {
+    type: 'bar',
+    data: {
+        labels: [{% for command in command_stats %}'{{ command.command_name }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Ishlatilgan soni',
+            data: [{% for command in command_stats %}{{ command.total_usage }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(153, 102, 255, 0.8)',
+                'rgba(255, 159, 64, 0.8)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+// Language Distribution Chart
+const languageCtx = document.getElementById('languageChart').getContext('2d');
+const languageChart = new Chart(languageCtx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for lang in language_stats %}'{{ lang.language }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for lang in language_stats %}{{ lang.count }}{% if not loop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)'
+            ],
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Auto-refresh charts every 60 seconds
+setInterval(() => {
+    location.reload();
+}, 60000);
+</script>
+{% endblock %} 

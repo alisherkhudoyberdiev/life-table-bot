@@ -1,0 +1,34 @@
+# Life Table Bot - Hosting Configuration
+
+# Enable Python
+AddHandler cgi-script .py
+
+# Set Python path
+SetEnv PYTHONPATH /path/to/your/bot
+
+# Redirect all requests to wsgi.py
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ wsgi.py/$1 [QSA,L]
+
+# Security headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+
+# Prevent access to sensitive files
+<Files "*.db">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.pyc">
+    Order allow,deny
+    Deny from all
+</Files> 

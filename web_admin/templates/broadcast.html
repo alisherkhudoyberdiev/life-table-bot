@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}Broadcast - Life Table Bot Admin{% endblock %}
+{% block page_title %}Broadcast Xabar{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-broadcast-tower me-2"></i>
+                    Barcha Foydalanuvchilarga Xabar Yuborish
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Statistics -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="h3 text-primary">{{ active_users }}</div>
+                            <small class="text-muted">Faol Foydalanuvchilar</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="h3 text-success">{{ active_users }}</div>
+                            <small class="text-muted">Yuboriladigan Xabar</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="h3 text-info">0</div>
+                            <small class="text-muted">Yuborilgan Xabar</small>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="message_type" class="form-label">Xabar Turi</label>
+                        <select class="form-select" id="message_type" name="message_type" required>
+                            <option value="">Xabar turini tanlang</option>
+                            <option value="text">Matn xabar</option>
+                            <option value="photo">Rasm bilan</option>
+                            <option value="video">Video bilan</option>
+                            <option value="document">Hujjat bilan</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Xabar Matni</label>
+                        <textarea class="form-control" id="message" name="message" rows="6" 
+                                  placeholder="Xabar matnini kiriting..." required></textarea>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            HTML formatlash ruxsat etiladi: &lt;b&gt;, &lt;i&gt;, &lt;u&gt;, &lt;s&gt;, &lt;code&gt;, &lt;pre&gt;
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Xabar Ko'rinishi</label>
+                        <div class="border rounded p-3 bg-light">
+                            <div id="message_preview">
+                                <em class="text-muted">Xabar matnini kiriting...</em>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Eslatma:</strong> Bu xabar barcha faol foydalanuvchilarga yuboriladi. 
+                        Xabar yuborish jarayoni bir necha daqiqa vaqt olishi mumkin.
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg" onclick="return confirmBroadcast()">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            Xabarni Yuborish
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
+                            <i class="fas fa-eraser me-2"></i>
+                            Tozalash
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Broadcast History -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>
+                    So'nggi Broadcast Xabarlar
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Sana</th>
+                                <th>Xabar</th>
+                                <th>Yuborilgan</th>
+                                <th>Holat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">
+                                    <i class="fas fa-inbox fa-2x mb-2"></i>
+                                    <br>Hali hech qanday broadcast xabar yuborilmagan
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Broadcast Progress Modal -->
+<div class="modal fade" id="broadcastModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Broadcast Jarayoni</h5>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Yuklanmoqda...</span>
+                    </div>
+                    <h6>Xabar yuborilmoqda...</h6>
+                    <div class="progress mt-3">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                             role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <small class="text-muted mt-2 d-block">
+                        <span id="sent_count">0</span> / <span id="total_count">{{ active_users }}</span> yuborildi
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Message preview
+document.getElementById('message').addEventListener('input', function() {
+    const preview = document.getElementById('message_preview');
+    const text = this.value;
+    
+    if (text.trim()) {
+        // Simple HTML preview (basic tags only)
+        const htmlText = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/&lt;b&gt;(.*?)&lt;\/b&gt;/g, '<strong>$1</strong>')
+            .replace(/&lt;i&gt;(.*?)&lt;\/i&gt;/g, '<em>$1</em>')
+            .replace(/&lt;u&gt;(.*?)&lt;\/u&gt;/g, '<u>$1</u>')
+            .replace(/&lt;s&gt;(.*?)&lt;\/s&gt;/g, '<s>$1</s>')
+            .replace(/&lt;code&gt;(.*?)&lt;\/code&gt;/g, '<code>$1</code>')
+            .replace(/&lt;pre&gt;(.*?)&lt;\/pre&gt;/g, '<pre>$1</pre>')
+            .replace(/\n/g, '<br>');
+        
+        preview.innerHTML = htmlText;
+    } else {
+        preview.innerHTML = '<em class="text-muted">Xabar matnini kiriting...</em>';
+    }
+});
+
+// Character counter
+document.getElementById('message').addEventListener('input', function() {
+    const maxLength = 4096;
+    const currentLength = this.value.length;
+    const remaining = maxLength - currentLength;
+    
+    // Update character count display
+    let counter = document.getElementById('char_counter');
+    if (!counter) {
+        counter = document.createElement('div');
+        counter.id = 'char_counter';
+        counter.className = 'form-text text-end';
+        this.parentNode.appendChild(counter);
+    }
+    
+    counter.textContent = `${currentLength} / ${maxLength}`;
+    
+    if (remaining < 100) {
+        counter.className = 'form-text text-end text-warning';
+    } else if (remaining < 0) {
+        counter.className = 'form-text text-end text-danger';
+    } else {
+        counter.className = 'form-text text-end text-muted';
+    }
+});
+
+function confirmBroadcast() {
+    const message = document.getElementById('message').value.trim();
+    const messageType = document.getElementById('message_type').value;
+    
+    if (!message) {
+        alert('Iltimos, xabar matnini kiriting!');
+        return false;
+    }
+    
+    if (!messageType) {
+        alert('Iltimos, xabar turini tanlang!');
+        return false;
+    }
+    
+    const activeUsers = {{ active_users }};
+    const confirmMessage = `Bu xabar ${activeUsers} ta faol foydalanuvchiga yuboriladi.\n\nDavom etishni xohlaysizmi?`;
+    
+    return confirm(confirmMessage);
+}
+
+function clearForm() {
+    if (confirm('Formani tozalashni xohlaysizmi?')) {
+        document.getElementById('message').value = '';
+        document.getElementById('message_type').value = '';
+        document.getElementById('message_preview').innerHTML = '<em class="text-muted">Xabar matnini kiriting...</em>';
+        
+        const counter = document.getElementById('char_counter');
+        if (counter) {
+            counter.remove();
+        }
+    }
+}
+
+// Auto-save draft
+let autoSaveTimer;
+document.getElementById('message').addEventListener('input', function() {
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => {
+        localStorage.setItem('broadcast_draft', this.value);
+    }, 1000);
+});
+
+// Load draft on page load
+window.addEventListener('load', function() {
+    const draft = localStorage.getItem('broadcast_draft');
+    if (draft) {
+        document.getElementById('message').value = draft;
+        document.getElementById('message').dispatchEvent(new Event('input'));
+    }
+});
+
+// Clear draft after successful send
+document.querySelector('form').addEventListener('submit', function() {
+    localStorage.removeItem('broadcast_draft');
+});
+</script>
+{% endblock %} 
