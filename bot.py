@@ -13,6 +13,9 @@ from telegram.ext import (
     filters,
     ContextTypes,
 )
+from flask import Flask, jsonify
+import threading
+import time as time_module
 
 from src.database.sqlite_persistence import SQLitePersistence
 from src.database.database import init_database
@@ -38,6 +41,26 @@ from src.jobs import send_weekly_update
 
 # Load environment variables
 load_dotenv()
+
+# Initialize Flask app for Railway
+app = Flask(__name__)
+
+# Health check endpoint for Railway
+@app.route('/health')
+def health_check():
+    return jsonify({
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "service": "life-table-bot"
+    }), 200
+
+@app.route('/')
+def home():
+    return jsonify({
+        "message": "Life Table Bot is running",
+        "status": "active",
+        "timestamp": datetime.now().isoformat()
+    }), 200
 
 # Initialize database
 init_database()
@@ -125,11 +148,23 @@ except (KeyError, AttributeError):
 application.add_handler(MessageHandler(filters.Text(menu_texts), commands.menu_command))
 application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & filters.ChatType.PRIVATE, commands.handle_birthday_message))
 
-def main() -> None:
-    """Start the bot."""
-    # Run the bot
-    logger.info("Starting bot...")
+def run_bot():
+    """Run the bot in a separate thread."""
+    logger.info("Starting bot in background thread...")
     application.run_polling()
+
+def main() -> None:
+    """Start the bot and web server."""
+    # Start bot in a separate thread
+    bot_thread = threading.Thread(target=run_bot, daemon=True)
+    bot_thread.start()
+    
+    # Get port from Railway environment variable
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Start Flask web server
+    logger.info(f"Starting web server on port {port}...")
+    app.run(host='0.0.0.0', port=port, debug=False)
 
 if __name__ == "__main__":
     main() 
