@@ -1,12 +1,32 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime, timedelta
-import sqlite3
-import json
+# -*- coding: utf-8 -*-
+import asyncio
 import os
+import sqlite3
+from datetime import datetime
 from functools import wraps
 
+from flask import (Flask, flash, jsonify, redirect, render_template, request,
+                   session, url_for)
+from flask_sqlalchemy import SQLAlchemy
+
+# Botga kerakli modullarni import qilish
+from telegram import Update
+from telegram.ext import (Application, CallbackQueryHandler, CommandHandler,
+                          ContextTypes, MessageHandler, filters)
+
+# Proyekt ichidagi modullarni import qilish
+# Path'ni to'g'ri sozlash kerak bo'lishi mumkin
+import sys
+# Bu web_admin papkasidan bir pog'ona yuqoriga chiqib, asosiy papkani qo'shadi
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from src.config import ADMIN_ID, TELEGRAM_TOKEN
+from src.database.database import init_database
+from src.database.sqlite_persistence import SQLitePersistence
+from src.handlers import admin, callbacks, commands
+from src.utils import localization
+
+# --- Flask App Konfiguratsiyasi ---
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-this')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///admin_users.db'
@@ -14,14 +34,47 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Admin User Model
+
+# --- Lokalizatsiya va Bot Boshlang'ich Sozlamalari ---
+try:
+    localization.LOCALES, localization.QUOTES = localization.load_locales()
+except Exception as e:
+    app.logger.error(f"Failed to load localization files: {e}")
+    # Fallback ma'lumotlar
+    localization.LOCALES = {"languages": {"en": "English"}, "welcome": {"en": "Hello!"}}
+    localization.QUOTES = {"en": ["Time is passing"]}
+
+init_database()
+
+
+# --- Telegram Botni Sozlash (Webhook uchun) ---
+persistence = SQLitePersistence(db_path='bot_database.db')
+bot_app = (
+    Application.builder()
+    .token(TELEGRAM_TOKEN)
+    .persistence(persistence)
+    .build()
+)
+
+# Handlers (buyruqlar) ni ro'yxatdan o'tkazish
+bot_app.add_handler(CommandHandler("start", commands.start_command))
+bot_app.add_handler(CommandHandler("menu", commands.menu_command))
+bot_app.add_handler(CommandHandler("help", commands.help_command))
+bot_app.add_handler(CommandHandler("admin", admin.admin_command))
+bot_app.add_handler(CallbackQueryHandler(callbacks.button_callback))
+menu_texts = [v for k, v in localization.LOCALES.get("main_keyboard_menu_button", {}).items()]
+bot_app.add_handler(MessageHandler(filters.Text(menu_texts), commands.menu_command))
+bot_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & filters.ChatType.PRIVATE, commands.handle_birthday_message))
+bot_app.add_handler(MessageHandler(filters.Chat(ADMIN_ID) & ~filters.COMMAND, admin.handle_broadcast_message))
+
+
+# --- Admin Panel Modellari va Funksiyalari ---
 class AdminUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-# Login required decorator
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -30,23 +83,33 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Database connection for bot data
 def get_bot_db():
-    conn = sqlite3.connect('../bot_database.db')
+    # Path'ni to'g'rilash
+    db_path = os.path.join(os.path.dirname(app.root_path), '..', 'bot_database.db')
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
 def parse_date(date_str):
-    """Convert string date to datetime object"""
-    if not date_str:
-        return None
+    if not date_str: return None
     try:
-        if isinstance(date_str, str):
-            return datetime.fromisoformat(date_str.replace('Z', '+00:00'))
-        return date_str
-    except:
-        return None
+        return datetime.fromisoformat(str(date_str).replace('Z', '+00:00'))
+    except: return None
 
+
+# --- Webhook uchun Asosiy Yo'l (Route) ---
+@app.route(f"/webhook/{TELEGRAM_TOKEN}", methods=["POST"])
+async def webhook():
+    """Telegramdan kelgan xabarlarni qabul qiladi"""
+    if request.is_json:
+        update_data = request.get_json()
+        update = Update.de_json(update_data, bot_app.bot)
+        await bot_app.process_update(update)
+        return "ok", 200
+    return "Bad Request", 400
+
+
+# --- Admin Panel Yo'llari (Routes) ---
 @app.route('/')
 @login_required
 def dashboard():
@@ -329,17 +392,7 @@ def api_stats():
     })
 
 if __name__ == '__main__':
+    # Lokal test uchun (PythonAnywhere'da ishlatilmaydi)
     with app.app_context():
-        db.create_all()
-        
-        # Create default admin user if none exists
-        if not AdminUser.query.first():
-            admin_user = AdminUser(
-                username='admin',
-                password_hash=generate_password_hash('admin123')
-            )
-            db.session.add(admin_user)
-            db.session.commit()
-            print("Default admin user created: username='admin', password='admin123'")
-    
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+        db.create_all() # Admin DB yaratish
+    app.run(debug=True, host='0.0.0.0', port=5001) 
