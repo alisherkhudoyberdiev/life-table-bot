@@ -1,44 +1,92 @@
+#!/usr/bin/env python3
 import requests
 import os
+from dotenv import load_dotenv
 
-# Atrof-muhit o'zgaruvchilaridan yoki to'g'ridan-to'g'ri o'rnatish
-# PythonAnywhere'da environment variables'dan olinadi
-TOKEN = os.environ.get("TELEGRAM_TOKEN", "YOUR_TELEGRAM_TOKEN_HERE")
-# Domen nomingizni yozing
-APP_NAME = os.environ.get("PYTHONANYWHERE_DOMAIN", "yourusername.pythonanywhere.com")
-
-# Webhook URL'ni yaratish
-WEBHOOK_URL = f"https://{APP_NAME}/webhook/{TOKEN}"
+# Load environment variables
+load_dotenv()
 
 def set_webhook():
-    """Telegram Bot uchun webhook'ni o'rnatadi."""
-    print(f"Webhook o'rnatilmoqda: {WEBHOOK_URL}")
-
-    # Telegram API ga so'rov yuborish
-    url = f"https://api.telegram.org/bot{TOKEN}/setWebhook?url={WEBHOOK_URL}"
+    """Set webhook URL for the bot"""
+    token = os.getenv('TELEGRAM_TOKEN')
     
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # HTTP xatolarini tekshirish
-        
+    # Webhook URL - o'zgartiring
+    webhook_url = "https://your-domain.com/webhook"  # O'z domain'ingizni yozing
+    
+    # Set webhook
+    url = f"https://api.telegram.org/bot{token}/setWebhook"
+    data = {
+        'url': webhook_url,
+        'allowed_updates': ['message', 'callback_query']
+    }
+    
+    response = requests.post(url, json=data)
+    
+    if response.status_code == 200:
         result = response.json()
-        
-        if result.get("ok"):
-            print("✅ Webhook muvaffaqiyatli o'rnatildi!")
-            print(f"Natija: {result.get('description')}")
+        if result.get('ok'):
+            print(f"✅ Webhook muvaffaqiyatli o'rnatildi!")
+            print(f"🌐 URL: {webhook_url}")
         else:
-            print("❌ Webhook o'rnatishda xatolik yuz berdi.")
-            print(f"Xato kodi: {result.get('error_code')}")
-            print(f"Tavsif: {result.get('description')}")
-            
-    except requests.exceptions.RequestException as e:
-        print(f"❌ So'rov yuborishda xatolik: {e}")
-    except Exception as e:
-        print(f"❌ Kutilmagan xatolik: {e}")
+            print(f"❌ Xatolik: {result.get('description')}")
+    else:
+        print(f"❌ HTTP xatolik: {response.status_code}")
+
+def delete_webhook():
+    """Delete webhook and switch to polling"""
+    token = os.getenv('TELEGRAM_TOKEN')
+    
+    url = f"https://api.telegram.org/bot{token}/deleteWebhook"
+    response = requests.post(url)
+    
+    if response.status_code == 200:
+        result = response.json()
+        if result.get('ok'):
+            print("✅ Webhook o'chirildi, polling'ga o'tildi")
+        else:
+            print(f"❌ Xatolik: {result.get('description')}")
+    else:
+        print(f"❌ HTTP xatolik: {response.status_code}")
+
+def get_webhook_info():
+    """Get current webhook info"""
+    token = os.getenv('TELEGRAM_TOKEN')
+    
+    url = f"https://api.telegram.org/bot{token}/getWebhookInfo"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        result = response.json()
+        if result.get('ok'):
+            info = result.get('result', {})
+            print("📊 Webhook ma'lumotlari:")
+            print(f"URL: {info.get('url', 'O\'rnatilmagan')}")
+            print(f"Has custom certificate: {info.get('has_custom_certificate', False)}")
+            print(f"Pending update count: {info.get('pending_update_count', 0)}")
+            print(f"Last error date: {info.get('last_error_date')}")
+            print(f"Last error message: {info.get('last_error_message')}")
+        else:
+            print(f"❌ Xatolik: {result.get('description')}")
+    else:
+        print(f"❌ HTTP xatolik: {response.status_code}")
 
 if __name__ == "__main__":
-    # Muhim! TOKEN va APP_NAME to'g'ri ekanligiga ishonch hosil qiling
-    if "YOUR_TELEGRAM_TOKEN_HERE" in TOKEN or "yourusername" in APP_NAME:
-        print("DIQQAT: Fayl ichidagi TOKEN yoki APP_NAME ni to'g'rilang!")
+    import sys
+    
+    if len(sys.argv) > 1:
+        command = sys.argv[1].lower()
+        
+        if command == "set":
+            set_webhook()
+        elif command == "delete":
+            delete_webhook()
+        elif command == "info":
+            get_webhook_info()
+        else:
+            print("❌ Noto'g'ri buyruq!")
+            print("Foydalanish: python3 set_webhook.py [set|delete|info]")
     else:
-        set_webhook() 
+        print("📋 Webhook boshqaruvi:")
+        print("1. O'rnatish: python3 set_webhook.py set")
+        print("2. O'chirish: python3 set_webhook.py delete")
+        print("3. Ma'lumot: python3 set_webhook.py info") 

@@ -13,7 +13,7 @@ from telegram.ext import (
     filters,
     ContextTypes,
 )
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import threading
 import time as time_module
 import asyncio
@@ -149,6 +149,18 @@ except (KeyError, AttributeError):
 application.add_handler(MessageHandler(filters.Text(menu_texts), commands.menu_command))
 application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & filters.ChatType.PRIVATE, commands.handle_birthday_message))
 
+# Webhook endpoint
+@app.route('/webhook/<token>', methods=['POST'])
+def webhook(token):
+    """Webhook endpoint for Telegram updates"""
+    if token == TELEGRAM_TOKEN:
+        update = request.get_json()
+        # Process update asynchronously
+        asyncio.run(application.process_update(update))
+        return jsonify({"status": "ok"}), 200
+    else:
+        return jsonify({"error": "Invalid token"}), 403
+
 def run_flask():
     # Get port from Railway environment variable, use 5001 as fallback to avoid conflicts
     port = int(os.environ.get('PORT', 5001))
@@ -161,8 +173,18 @@ def main() -> None:
     flask_thread = threading.Thread(target=run_flask, daemon=True)
     flask_thread.start()
     
-    # Run the Telegram bot in the main thread
-    application.run_polling()
+    # Check if webhook mode is enabled
+    webhook_mode = os.environ.get('WEBHOOK_MODE', 'false').lower() == 'true'
+    
+    if webhook_mode:
+        logger.info("Starting bot in webhook mode...")
+        # In webhook mode, we don't need to run polling
+        # The bot will receive updates via webhook endpoint
+        flask_thread.join()  # Keep the main thread alive
+    else:
+        logger.info("Starting bot in polling mode...")
+        # Run the Telegram bot in the main thread
+        application.run_polling()
 
 if __name__ == "__main__":
     main() 
