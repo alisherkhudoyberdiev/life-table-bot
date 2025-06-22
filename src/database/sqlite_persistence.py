@@ -2,6 +2,7 @@ import json
 import logging
 from typing import Dict, Any, Optional
 from datetime import datetime
+import pickle
 
 from telegram.ext import BasePersistence
 from telegram import Bot
@@ -16,12 +17,29 @@ logger = logging.getLogger(__name__)
 class SQLitePersistence(BasePersistence):
     """Custom SQLite persistence for telegram bot."""
     
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, filepath: str):
+        """
+        filepath: Ma'lumotlar bazasi fayliga yo'l.
+        """
+        # Barcha argumentlarni o'zimiz qayta ishlaymiz, ota klassga uzatmaymiz
+        super().__init__()
+        self.filepath = filepath
+        self.conn = None
+        self.bot_data = {}
+        self._connect()
+        self._load_bot_data()
         # Initialize database
         init_database()
         self.user_repo = UserRepository()
         self.stats_repo = StatsRepository()
+    
+    def _connect(self):
+        # ... (faylning qolgan qismi deyarli o'zgarishsiz) ...
+        # ...
+        # quyidagi o'zgarishni ham kiritamiz:
+        # ...
+        self.conn = sqlite3.connect(self.filepath)
+        self.conn.row_factory = sqlite3.Row
     
     async def get_user_data(self) -> Dict[int, Any]:
         """Get all user data from database."""
@@ -49,18 +67,9 @@ class SQLitePersistence(BasePersistence):
         # For this bot, we don't store chat-specific data
         return {}
     
-    async def get_bot_data(self) -> Dict[str, Any]:
-        """Get bot data from database."""
-        try:
-            # Get command usage stats
-            command_usage = self.stats_repo.get_command_usage_stats()
-            
-            return {
-                'command_usage': command_usage
-            }
-        except Exception as e:
-            logger.error(f"Error getting bot data: {e}")
-            return {}
+    async def get_bot_data(self) -> dict:
+        """Returns the bot_data from memory."""
+        return self.bot_data
     
     async def get_conversations(self, name: str) -> Dict[str, Any]:
         """Get conversations from database."""
@@ -109,18 +118,25 @@ class SQLitePersistence(BasePersistence):
         # For this bot, we don't store chat-specific data
         pass
     
-    async def update_bot_data(self, data: Dict[str, Any]) -> None:
-        """Update bot data in database."""
+    async def update_bot_data(self, data: dict) -> None:
+        """Updates the bot_data in memory and database."""
+        self.bot_data = data
+        self._write_bot_data()
+    
+    def _write_bot_data(self):
+        """Writes bot_data to the database."""
+        if not self.conn:
+            self._connect()
         try:
-            # Update command usage if provided
-            if 'command_usage' in data:
-                for command, count in data['command_usage'].items():
-                    # Store each command usage separately
-                    for _ in range(count):
-                        self.stats_repo.track_command_usage(command)
-        
+            pickled_data = pickle.dumps(self.bot_data)
+            cursor = self.conn.cursor()
+            cursor.execute(
+                "INSERT OR REPLACE INTO bot_data (key, value) VALUES (?, ?)",
+                ("bot_data", pickled_data)
+            )
+            self.conn.commit()
         except Exception as e:
-            logger.error(f"Error updating bot data: {e}")
+            logger.error(f"Failed to write bot_data to SQLite: {e}")
     
     async def update_conversation(self, name: str, key: str, new_state: Optional[object]) -> None:
         """Update conversation in database."""
@@ -170,9 +186,8 @@ class SQLitePersistence(BasePersistence):
         # For this bot, we don't store chat-specific data
         pass
     
-    async def refresh_bot_data(self, bot_data: Dict[str, Any]) -> None:
-        """Refresh bot data from database."""
-        # This is called when bot data is accessed
+    async def refresh_bot_data(self, bot_data: dict) -> None:
+        """No-op for this persistence class."""
         pass
     
     async def update_callback_data(self, callback_data: Dict[str, Any]) -> None:
