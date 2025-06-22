@@ -48,7 +48,7 @@ init_database()
 
 
 # --- Telegram Botni Sozlash (Webhook uchun) ---
-persistence = SQLitePersistence(db_path='bot_database.db')
+persistence = SQLitePersistence(filepath='bot_database.db')
 bot_app = (
     Application.builder()
     .token(TELEGRAM_TOKEN)
