@@ -16,6 +16,7 @@ from telegram.ext import (
 from flask import Flask, jsonify
 import threading
 import time as time_module
+import asyncio
 
 from src.database.sqlite_persistence import SQLitePersistence
 from src.database.database import init_database
@@ -101,7 +102,7 @@ async def post_init(application: Application) -> None:
         
     logger.info("Bot commands set for all available languages.")
 
-persistence = SQLitePersistence()
+persistence = SQLitePersistence("bot_database.db")
 
 application = (
     Application.builder()
@@ -148,23 +149,20 @@ except (KeyError, AttributeError):
 application.add_handler(MessageHandler(filters.Text(menu_texts), commands.menu_command))
 application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND & filters.ChatType.PRIVATE, commands.handle_birthday_message))
 
-def run_bot():
-    """Run the bot in a separate thread."""
-    logger.info("Starting bot in background thread...")
-    application.run_polling()
+def run_flask():
+    # Get port from Railway environment variable, use 5001 as fallback to avoid conflicts
+    port = int(os.environ.get('PORT', 5001))
+    logger.info(f"Starting web server on port {port}...")
+    app.run(host='0.0.0.0', port=port, debug=False)
 
 def main() -> None:
     """Start the bot and web server."""
-    # Start bot in a separate thread
-    bot_thread = threading.Thread(target=run_bot, daemon=True)
-    bot_thread.start()
+    # Start Flask web server in a separate thread
+    flask_thread = threading.Thread(target=run_flask, daemon=True)
+    flask_thread.start()
     
-    # Get port from Railway environment variable
-    port = int(os.environ.get('PORT', 5000))
-    
-    # Start Flask web server
-    logger.info(f"Starting web server on port {port}...")
-    app.run(host='0.0.0.0', port=port, debug=False)
+    # Run the Telegram bot in the main thread
+    application.run_polling()
 
 if __name__ == "__main__":
     main() 

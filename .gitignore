@@ -1,0 +1,13 @@
+# Environments
+.env
+.venv
+venv/
+__pycache__/
+
+# IDE
+.idea/
+.vscode/
+
+# Files
+*.pyc
+*.png 
