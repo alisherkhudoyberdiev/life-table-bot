@@ -1,5 +1,6 @@
 import json
 import logging
+import sqlite3
 from typing import Dict, Any, Optional
 from datetime import datetime
 import pickle
@@ -19,9 +20,10 @@ class SQLitePersistence(BasePersistence):
     
     def __init__(self, filepath: str):
         """
-        filepath: Ma'lumotlar bazasi fayliga yo'l.
+        Initialize SQLite persistence.
+        filepath: Path to the database file.
         """
-        # Barcha argumentlarni o'zimiz qayta ishlaymiz, ota klassga uzatmaymiz
+        # Call parent constructor without arguments
         super().__init__()
         self.filepath = filepath
         self.conn = None
@@ -34,12 +36,35 @@ class SQLitePersistence(BasePersistence):
         self.stats_repo = StatsRepository()
     
     def _connect(self):
-        # ... (faylning qolgan qismi deyarli o'zgarishsiz) ...
-        # ...
-        # quyidagi o'zgarishni ham kiritamiz:
-        # ...
-        self.conn = sqlite3.connect(self.filepath)
-        self.conn.row_factory = sqlite3.Row
+        """Connect to SQLite database."""
+        try:
+            self.conn = sqlite3.connect(self.filepath)
+            self.conn.row_factory = sqlite3.Row
+            # Create bot_data table if it doesn't exist
+            cursor = self.conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS bot_data (
+                    key TEXT PRIMARY KEY,
+                    value BLOB
+                )
+            """)
+            self.conn.commit()
+        except Exception as e:
+            logger.error(f"Failed to connect to SQLite: {e}")
+    
+    def _load_bot_data(self):
+        """Load bot data from database."""
+        if not self.conn:
+            self._connect()
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute("SELECT value FROM bot_data WHERE key = ?", ("bot_data",))
+            result = cursor.fetchone()
+            if result:
+                self.bot_data = pickle.loads(result[0])
+        except Exception as e:
+            logger.error(f"Failed to load bot_data from SQLite: {e}")
+            self.bot_data = {}
     
     async def get_user_data(self) -> Dict[int, Any]:
         """Get all user data from database."""
